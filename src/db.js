@@ -13,6 +13,7 @@ export function connect (options) {
 // simple migration system
 // maintains a version table in the schema
 export function migrate (connHandler, done) {
+  // 1) ensure version table exists. initialize with -1 if it doesn't exist already
   function createVersionTable (cb) {
     connHandler.query(`SHOW TABLES LIKE 'version'`, (err, results, fields) => {
       if (err) return cb(err)
@@ -30,6 +31,7 @@ export function migrate (connHandler, done) {
     })
   }
 
+  // get current schema version number
   function getVersion (cb) {
     connHandler.query(`SELECT version from version LIMIT 1`, (err, results, fields) => {
       if (err) return cb(err)
@@ -38,6 +40,7 @@ export function migrate (connHandler, done) {
     })
   }
 
+  // run the neccessary migrations to get schema up to date
   function runMigrations (version, cb) {
     // version represents the index of last migration ran on this db
     // if -1, no migrations have bene run
@@ -67,6 +70,8 @@ export function migrate (connHandler, done) {
       const range = (start, end) => Array.from({length: (end - start)}, (v, k) => k + start)
 
       const versionsToRun = range(version + 1, migrations.length)
+
+      // run each migration, in series, run after the other. call `cb` when done
       async.eachSeries(versionsToRun, runMigrationVersion, cb)
     }
   }

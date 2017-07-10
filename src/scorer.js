@@ -18,6 +18,7 @@ const tagValues = {
   frame: -5
 }
 
+// tagCounts is a simple mapping of tag name (string) -> tag count (integer)
 export function tagCountsToScore (tagCounts) {
   let score = 0
 

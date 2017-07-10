@@ -18,6 +18,8 @@ const actions = {
 
       // ASSUMPTION: key contains no underscores
       const html = fs.readFileSync(path.join('data', item), 'utf8')
+
+      // bob_2013_02_15.html
       const itemSplit = item.split('_')
       const key = itemSplit[0]
       const date = new Date(
@@ -52,6 +54,7 @@ const actions = {
       done(null)
     })
   },
+  // search query
   get: (connHandler, done) => {
     const author = program.author
     const begin = new Date(program.begin)
@@ -94,6 +97,7 @@ const actions = {
   }
 }
 
+// make an ascii table
 function format (resultSet) {
   const keys = Object.keys(resultSet[0])
   const widths = keys.map(key => {
