@@ -7,11 +7,14 @@ import fs from 'fs'
 
 const actions = {
   add: (connHandler, cb) => {
+    const author = program.author
     const sourcePath = program.source
     const html = fs.readFileSync(sourcePath, 'utf8')
+
     db.add(connHandler, {
       html,
-      score: scorer(html)
+      score: scorer(html),
+      author
     }, cb)
   }
 }

@@ -1,3 +1,4 @@
 [
-  "CREATE TABLE scores (html TEXT, score INTEGER)"
+  "CREATE TABLE scores (html TEXT, score INTEGER)",
+  "ALTER TABLE scores ADD author VARCHAR(50)"
 ]
