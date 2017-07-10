@@ -24,4 +24,7 @@ describe('tagCountsToScore', () => {
   tester('1 font', {div: 1}, 3) // 1x-1 = -1 points
   tester('1 div, 2 p', {div: 1, p: 2}, 5) // 1x3 + 2x1 = 5 points
   tester('1 div, 2 p', {div: 1, p: 2}, 5) // 1x3 + 2x1 = 5 points
+
+  // edge cases
+  tester('1 Div (case insensitive) ', {Div: 1}, 3) // 1x3 = 3 points
 })

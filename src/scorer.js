@@ -21,7 +21,7 @@ export function tagCountsToScore (tagCounts) {
 
   for (const tagName in tagCounts) {
     const count = tagCounts[tagName]
-    score += count * tagValues[tagName]
+    score += count * tagValues[tagName.toLowerCase()]
   }
 
   return score
