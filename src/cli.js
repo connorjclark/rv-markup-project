@@ -4,9 +4,30 @@ import * as db from './db'
 import scorer from './scorer'
 import program from 'commander'
 import fs from 'fs'
+import path from 'path'
+import async from 'async'
 
 const actions = {
-  add: (connHandler, cb) => {
+  // process all .html files in data/
+  init: (connHandler, done) => {
+    const items = fs.readdirSync('data/');
+
+    async.eachSeries(items, (item, cb) => {
+      if (!item.endsWith('.html')) return cb(null)
+
+      // ASSUMPTION: key contains no underscores
+      const html = fs.readFileSync(path.join('data', item), 'utf8')
+      const key = item.split('_')[0]
+
+      db.add(connHandler, {
+        html,
+        score: scorer(html),
+        author: key
+      }, cb)
+    }, done)
+  },
+  // process html at given file
+  add: (connHandler, done) => {
     const author = program.author
     const sourcePath = program.source
     const html = fs.readFileSync(sourcePath, 'utf8')
@@ -15,7 +36,7 @@ const actions = {
       html,
       score: scorer(html),
       author
-    }, cb)
+    }, done)
   }
 }
 
