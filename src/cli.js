@@ -48,12 +48,12 @@ const actions = {
   },
   get: (connHandler, done) => {
     const author = program.author
-    const start = program.start
-    const end = program.end
+    const begin = new Date(program.begin)
+    const end = new Date(program.end)
 
     db.get(connHandler, {
       author,
-      start,
+      begin,
       end
     }, (err, results) => {
       if (err) return done(err)
@@ -72,6 +72,8 @@ program
   .option('-d, --database <database>', 'mysql database')
   .option('-s, --source [source]', 'html source file')
   .option('-a, --author [author]', 'html author')
+  .option('-b, --begin [begin]', 'query beginning date')
+  .option('-e, --end [end]', 'query ending date')
   .action(action => {
     const connHandler = db.connect({
       'host': program.host,
