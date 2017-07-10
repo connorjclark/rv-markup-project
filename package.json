@@ -28,6 +28,11 @@
     "standard": "^10.0.2"
   },
   "standard": {
-    "ignore": ["dist"]
+    "ignore": [
+      "dist"
+    ]
+  },
+  "dependencies": {
+    "htmlparser2": "^3.9.2"
   }
 }

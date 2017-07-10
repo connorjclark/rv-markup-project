@@ -1,3 +1,5 @@
+import htmlparser from 'htmlparser2'
+
 const tagValues = {
   div: 3,
   p: 1,
@@ -28,6 +30,32 @@ export function tagCountsToScore (tagCounts) {
   return score
 }
 
+/*
+  At first I tried cheerio (https://github.com/cheeriojs/cheerio),
+  since I've used it before. I discovered that it parses HTML fragments
+  by wrapping it around proper HTML when missing.
+  (ex: <div></div> -> <html><head></head><body><div></div></body>)
+
+  htmlparser2 doesn't do that, and supports a much better traversal API
+  for this simple purpose.
+*/
+
+function parseTagCounts(htmlString) {
+  let tagCounts = {}
+
+  const parser = new htmlparser.Parser({
+    onopentagname: tagName => {
+      tagCounts[tagName] = (tagCounts[tagName] || 0) + 1
+    }
+  })
+  parser.write(htmlString)
+  parser.end()
+
+  return tagCounts
+}
+
 export default function scorer (htmlString) {
-  return 0
+  const tagCounts = parseTagCounts(htmlString)
+  const score = tagCountsToScore(tagCounts)
+  return score
 }

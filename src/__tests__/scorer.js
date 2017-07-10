@@ -6,12 +6,6 @@ it('canary', () => {
   expect(1).toEqual(1)
 })
 
-describe('scorer', () => {
-  it('basic', () => {
-    expect(scorer('')).toEqual(0)
-  })
-})
-
 describe('tagCountsToScore', () => {
   const tester = (testName, tagCounts, expected) => {
     it(testName, () => {
@@ -28,4 +22,25 @@ describe('tagCountsToScore', () => {
   // edge cases
   tester('1 Div (case insensitive) ', {Div: 1}, 3) // 1x3 = 3 points
   tester('1 strong (not scored) ', {strong: 1}, 0) // 1x0 = 0 points
+})
+
+describe('scorer', () => {
+  const tester = (testName, tagCounts, expected) => {
+    it(testName, () => {
+      expect(scorer(tagCounts)).toEqual(expected)
+    })
+  }
+
+  tester('basic', '', 0)
+  tester('<html>', '<html></html>', 5)
+  tester('example given in README', `
+    <html>
+        <body>
+          <p>foo</p>
+          <p>bar</p>
+          <div text-align='center'>
+            <big>hello world</big>
+          </div>
+        </body>
+    </html>`, 13)
 })
