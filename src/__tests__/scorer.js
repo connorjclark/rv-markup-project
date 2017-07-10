@@ -27,4 +27,5 @@ describe('tagCountsToScore', () => {
 
   // edge cases
   tester('1 Div (case insensitive) ', {Div: 1}, 3) // 1x3 = 3 points
+  tester('1 strong (not scored) ', {strong: 1}, 0) // 1x0 = 0 points
 })
