@@ -40,7 +40,7 @@ export function tagCountsToScore (tagCounts) {
   for this simple purpose.
 */
 
-function parseTagCounts(htmlString) {
+function parseTagCounts (htmlString) {
   let tagCounts = {}
 
   const parser = new htmlparser.Parser({

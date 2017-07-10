@@ -12,7 +12,7 @@ describe('tagCountsToScore', () => {
       expect(tagCountsToScore(tagCounts)).toEqual(expected)
     })
   }
-  
+
   tester('basic', {}, 0)
   tester('1 div', {div: 1}, 3) // 1x3 = 3 points
   tester('1 font', {div: 1}, 3) // 1x-1 = -1 points

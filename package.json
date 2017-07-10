@@ -4,7 +4,7 @@
   "description": "RV coding project",
   "main": "index.js",
   "scripts": {
-    "compile": "rimraf dist/* && babel src/ -d dist/ --ignore __tests__/*",
+    "compile": "rimraf dist/* && babel src/ -d dist/ --ignore __tests__/* && babel schema -d dist/schema/ --copy-files",
     "lint": "standard --fix",
     "test": "jest --coverage",
     "all": "yarn lint && yarn compile && yarn test"
@@ -33,6 +33,11 @@
     ]
   },
   "dependencies": {
-    "htmlparser2": "^3.9.2"
+    "async": "^2.5.0",
+    "htmlparser2": "^3.9.2",
+    "mysql": "^2.13.0"
+  },
+  "bin": {
+    "markup": "dist/cli.js"
   }
 }
