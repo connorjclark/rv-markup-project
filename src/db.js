@@ -101,3 +101,19 @@ export function get (connHandler, data, done) {
     done(null, results)
   })
 }
+
+export function best (connHandler, done) {
+  connHandler.query(`SELECT author, MAX(score) as best_score, created_at FROM scores GROUP BY author`, (err, results, fields) => {
+    if (err) return done(err)
+
+    done(null, results)
+  })
+}
+
+export function worst (connHandler, done) {
+  connHandler.query(`SELECT author, MIN(score) as worst_score, created_at FROM scores GROUP BY author`, (err, results, fields) => {
+    if (err) return done(err)
+
+    done(null, results)
+  })
+}

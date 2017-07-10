@@ -61,6 +61,22 @@ const actions = {
       console.log(results)
       done(null)
     })
+  },
+  best: (connHandler, done) => {
+    db.best(connHandler, (err, results) => {
+      if (err) return done(err)
+
+      console.log(results)
+      done(null)
+    })
+  },
+  worst: (connHandler, done) => {
+    db.worst(connHandler, (err, results) => {
+      if (err) return done(err)
+
+      console.log(results)
+      done(null)
+    })
   }
 }
 
