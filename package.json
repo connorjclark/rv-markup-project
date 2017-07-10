@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "async": "^2.5.0",
+    "commander": "^2.11.0",
     "htmlparser2": "^3.9.2",
     "mysql": "^2.13.0"
   },

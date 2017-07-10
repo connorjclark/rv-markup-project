@@ -4,6 +4,7 @@ const migrations = require('./schema/migrations.json')
 
 // returns a handler
 export function connect (options) {
+  console.log(options)
   const connHandler = mysql.createConnection(options)
   connHandler.connect()
   return connHandler
@@ -75,4 +76,12 @@ export function migrate (connHandler, done) {
     getVersion,
     runMigrations
   ], done)
+}
+
+export function add (connHandler, data, done) {
+  connHandler.query(`INSERT INTO scores SET ?`, data, (err, results, fields) => {
+    if (err) return done(err)
+
+    done(null)
+  })
 }
