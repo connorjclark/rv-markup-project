@@ -1,6 +1,7 @@
 import mysql from 'mysql'
 import async from 'async'
 const migrations = require('./schema/migrations.json')
+const queries = require('./schema/queries.json')
 
 // returns a handler
 export function connect (options) {
@@ -79,7 +80,7 @@ export function migrate (connHandler, done) {
 }
 
 export function add (connHandler, data, done) {  
-  connHandler.query(`INSERT INTO scores SET ?`, data, (err, results, fields) => {
+  connHandler.query(queries.insert, data, (err, results, fields) => {
     if (err) return done(err)
 
     done(null)
@@ -95,7 +96,7 @@ export function get (connHandler, data, done) {
     data.end, data.end
   ]
 
-  connHandler.query(`SELECT author, score, created_at FROM scores WHERE (author = ? OR ? IS NULL) AND (created_at >= ? OR ? IS NULL) AND (created_at <= ? OR ? IS NULL)`, params, (err, results, fields) => {
+  connHandler.query(queries.get, params, (err, results, fields) => {
     if (err) return done(err)
 
     done(null, results)
@@ -103,7 +104,7 @@ export function get (connHandler, data, done) {
 }
 
 export function best (connHandler, done) {
-  connHandler.query(`SELECT author, MAX(score) as best_score, created_at FROM scores GROUP BY author`, (err, results, fields) => {
+  connHandler.query(queries.best, (err, results, fields) => {
     if (err) return done(err)
 
     done(null, results)
@@ -111,7 +112,15 @@ export function best (connHandler, done) {
 }
 
 export function worst (connHandler, done) {
-  connHandler.query(`SELECT author, MIN(score) as worst_score, created_at FROM scores GROUP BY author`, (err, results, fields) => {
+  connHandler.query(queries.worst, (err, results, fields) => {
+    if (err) return done(err)
+
+    done(null, results)
+  })
+}
+
+export function average (connHandler, done) {
+  connHandler.query(queries.average, (err, results, fields) => {
     if (err) return done(err)
 
     done(null, results)

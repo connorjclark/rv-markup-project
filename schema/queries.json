@@ -1,0 +1,7 @@
+{
+  "best": "SELECT author, MAX(score) as best_score, created_at FROM scores GROUP BY author",
+  "worst": "SELECT author, MIN(score) as best_score, created_at FROM scores GROUP BY author",
+  "average": "SELECT author, AVG(score) as avg_score FROM scores GROUP BY author",
+  "insert": "INSERT INTO scores SET ?",
+  "get": "SELECT author, score, created_at FROM scores WHERE (author = ? OR ? IS NULL) AND (created_at >= ? OR ? IS NULL) AND (created_at <= ? OR ? IS NULL)"
+}

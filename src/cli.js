@@ -77,6 +77,14 @@ const actions = {
       console.log(results)
       done(null)
     })
+  },
+  average: (connHandler, done) => {
+    db.average(connHandler, (err, results) => {
+      if (err) return done(err)
+
+      console.log(results)
+      done(null)
+    })
   }
 }
 
