@@ -6,6 +6,7 @@ import program from 'commander'
 import fs from 'fs'
 import path from 'path'
 import async from 'async'
+import Table from 'cli-table'
 
 const actions = {
   // process all .html files in data/
@@ -58,7 +59,7 @@ const actions = {
     }, (err, results) => {
       if (err) return done(err)
 
-      console.log(results)
+      console.log(format(results))
       done(null)
     })
   },
@@ -66,7 +67,7 @@ const actions = {
     db.best(connHandler, (err, results) => {
       if (err) return done(err)
 
-      console.log(results)
+      console.log(format(results))
       done(null)
     })
   },
@@ -74,7 +75,7 @@ const actions = {
     db.worst(connHandler, (err, results) => {
       if (err) return done(err)
 
-      console.log(results)
+      console.log(format(results))
       done(null)
     })
   },
@@ -82,10 +83,24 @@ const actions = {
     db.average(connHandler, (err, results) => {
       if (err) return done(err)
 
-      console.log(results)
+      console.log(format(results))
       done(null)
     })
   }
+}
+
+function format(resultSet) {
+  const keys = Object.keys(resultSet[0])
+  const widths = keys.map(key => {
+    return resultSet[0][key] instanceof Date ? 25 : 15
+  })
+  const table = new Table({ head: keys, colWidths: widths })
+
+  for (const row of resultSet) {
+    table.push(keys.map(key => row[key]))
+  }
+
+  return table.toString()
 }
 
 program
