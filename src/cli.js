@@ -10,7 +10,7 @@ import Table from 'cli-table'
 
 const actions = {
   // process all .html files in data/
-  init: (connHandler, done) => {
+  seed: (connHandler, done) => {
     const items = fs.readdirSync('data/')
 
     async.eachSeries(items, (item, cb) => {
@@ -18,12 +18,12 @@ const actions = {
 
       // ASSUMPTION: key contains no underscores
       const html = fs.readFileSync(path.join('data', item), 'utf8')
-      const item_split = item.split('_')
-      const key = item_split[0]
+      const itemSplit = item.split('_')
+      const key = itemSplit[0]
       const date = new Date(
-        parseInt(item_split[1]),
-        parseInt(item_split[2]) - 1,
-        parseInt(item_split[3])
+        parseInt(itemSplit[1]),
+        parseInt(itemSplit[2]) - 1,
+        parseInt(itemSplit[3])
       )
 
       db.add(connHandler, {
@@ -44,8 +44,13 @@ const actions = {
       html,
       score: scorer(html),
       author,
-      created_at: Date.now()
-    }, done)
+      created_at: new Date()
+    }, (err, results) => {
+      if (err) return done(err)
+
+      console.log(`affected ${results.affectedRows} row(s)`)
+      done(null)
+    })
   },
   get: (connHandler, done) => {
     const author = program.author
@@ -89,7 +94,7 @@ const actions = {
   }
 }
 
-function format(resultSet) {
+function format (resultSet) {
   const keys = Object.keys(resultSet[0])
   const widths = keys.map(key => {
     return resultSet[0][key] instanceof Date ? 25 : 15
@@ -113,6 +118,17 @@ program
   .option('-a, --author [author]', 'html author')
   .option('-b, --begin [begin]', 'query beginning date')
   .option('-e, --end [end]', 'query ending date')
+  .on('--help', () => {
+    console.log('')
+    console.log('  Commands:')
+    console.log('')
+    console.log('     markup [db_options] seed')
+    console.log('     markup [db_options] -a [author] -s [html source file] add')
+    console.log('     markup [db_options] -a [author] -b [begin] -e [end] get')
+    console.log('     markup [db_options] best')
+    console.log('     markup [db_options] worst')
+    console.log('     markup [db_options] average')
+  })
   .action(action => {
     const connHandler = db.connect({
       'host': program.host,
@@ -133,7 +149,7 @@ program
           connHandler.destroy()
         })
       } else {
-        console.log('invalid action. try: ', Object.keys(actions))
+        console.log('invalid action. try --help or one of: ', Object.keys(actions))
         connHandler.destroy()
       }
     })

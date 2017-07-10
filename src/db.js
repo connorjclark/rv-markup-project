@@ -5,7 +5,6 @@ const queries = require('./schema/queries.json')
 
 // returns a handler
 export function connect (options) {
-  console.log(options)
   const connHandler = mysql.createConnection(options)
   connHandler.connect()
   return connHandler
@@ -79,11 +78,11 @@ export function migrate (connHandler, done) {
   ], done)
 }
 
-export function add (connHandler, data, done) {  
+export function add (connHandler, data, done) {
   connHandler.query(queries.insert, data, (err, results, fields) => {
     if (err) return done(err)
 
-    done(null)
+    done(null, results)
   })
 }
 

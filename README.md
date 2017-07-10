@@ -1,6 +1,188 @@
 MarkupProject
 =============
 
+Installation
+------------
+
+If you do not already have it on your system, install node (I am using v7.7.2) and yarn
+
+* Run `yarn install` to install all dependencies
+* Run `yarn compile` to compile the project
+* Run `npm link` to install the `markup` script as an executable
+
+You should now be able to use the `markup` program.
+
+Usage
+-----
+
+Given a mysql database located at 'localhost', named 'markup', with a user 'me' and password 'bad_password', replace `[db_options]` with `-u me -p bad_password -h localhost -d markup`. (example, for the `seed` command: `markup -h localhost -u me -p bad_password -d markup seed`)
+
+### seed
+
+`markup [db_options] seed`
+
+This will process all the html files in the data/ folder
+
+### add new record
+
+`markup [db_options] -a [author] -s [html source file] add`
+
+Processes the html file at given file, and inserts into the database
+
+Example output:
+```
+> markup [db_options] -a connor -s data\bob_2013_02_10.html add
+
+affected 1 row(s)
+```
+
+### get all records
+
+`markup [db_options] get`
+
+Example output:
+```
+┌───────────────┬───────────────┬─────────────────────────┐
+│ author        │ score         │ created_at              │
+├───────────────┼───────────────┼─────────────────────────┤
+│ bob           │ -15           │ Sun Feb 10 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ bob           │ -1            │ Fri Feb 15 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ bob           │ 32            │ Fri Mar 01 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ cari          │ 3             │ Fri Feb 15 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ cari          │ 7             │ Sat Feb 16 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ cari          │ 22            │ Tue Mar 05 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ john          │ 19            │ Sat Jan 05 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ john          │ 39            │ Wed Feb 13 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ john          │ 12            │ Wed Mar 13 2013 00:00:… │
+└───────────────┴───────────────┴─────────────────────────┘
+```
+
+### query by author
+
+`markup [db_options] -a [author] get`
+
+Example output:
+```
+> markup [db_options] -a bob get
+
+┌───────────────┬───────────────┬─────────────────────────┐
+│ author        │ score         │ created_at              │
+├───────────────┼───────────────┼─────────────────────────┤
+│ bob           │ -15           │ Sun Feb 10 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ bob           │ -1            │ Fri Feb 15 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ bob           │ 32            │ Fri Mar 01 2013 00:00:… │
+└───────────────┴───────────────┴─────────────────────────┘
+```
+
+### query by date range
+
+`markup [db_options] -b [before] -e [end] get`
+
+Timestamps are ISO format
+
+Example:
+```
+> markup [db_options] -b "2013-02-11T08:00:00.000Z" -e "2013-02-27T08:00:00.000Z" get
+
+┌───────────────┬───────────────┬─────────────────────────┐
+│ author        │ score         │ created_at              │
+├───────────────┼───────────────┼─────────────────────────┤
+│ bob           │ -1            │ Fri Feb 15 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ cari          │ 3             │ Fri Feb 15 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ cari          │ 7             │ Sat Feb 16 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ john          │ 39            │ Wed Feb 13 2013 00:00:… │
+└───────────────┴───────────────┴─────────────────────────┘
+```
+
+### query by author and date range
+
+`markup [db_options] -a [author] -b [before] -e [end] get`
+
+Example:
+```
+> markup [db_options] -a bob -b "2013-02-11T08:00:00.000Z" -e "2013-02-27T08:00:00.000Z" get
+
+┌───────────────┬───────────────┬─────────────────────────┐
+│ author        │ score         │ created_at              │
+├───────────────┼───────────────┼─────────────────────────┤
+│ bob           │ -1            │ Fri Feb 15 2013 00:00:… │
+└───────────────┴───────────────┴─────────────────────────┘
+```
+
+### best html score of each author
+
+`markup [db_options] best`
+
+Example:
+```
+> markup [db_options] best
+
+┌───────────────┬───────────────┬─────────────────────────┐
+│ author        │ best_score    │ created_at              │
+├───────────────┼───────────────┼─────────────────────────┤
+│ bob           │ 32            │ Sun Feb 10 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ cari          │ 22            │ Fri Feb 15 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ john          │ 39            │ Sat Jan 05 2013 00:00:… │
+└───────────────┴───────────────┴─────────────────────────┘
+```
+
+### worst html score of each author
+
+`markup [db_options] worst`
+
+Example:
+```
+> markup [db_options] worst
+
+┌───────────────┬───────────────┬─────────────────────────┐
+│ author        │ best_score    │ created_at              │
+├───────────────┼───────────────┼─────────────────────────┤
+│ bob           │ -15           │ Sun Feb 10 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ cari          │ 3             │ Fri Feb 15 2013 00:00:… │
+├───────────────┼───────────────┼─────────────────────────┤
+│ john          │ 12            │ Sat Jan 05 2013 00:00:… │
+└───────────────┴───────────────┴─────────────────────────┘
+```
+
+### average html score of each author
+
+`markup [db_options] average`
+
+Example:
+```
+> markup [db_options] average
+
+┌───────────────┬───────────────┐
+│ author        │ avg_score     │
+├───────────────┼───────────────┤
+│ bob           │ 5.3333        │
+├───────────────┼───────────────┤
+│ cari          │ 10.6667       │
+├───────────────┼───────────────┤
+│ john          │ 23.3333       │
+└───────────────┴───────────────┘
+```
+
+### help
+
+`markup --help`
+___
 Info
 ----
 Create a class in the langauge of your choice that will read HTML content input and score and give
