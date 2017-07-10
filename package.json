@@ -1,0 +1,33 @@
+{
+  "name": "markup-scorer",
+  "version": "1.0.0",
+  "description": "RV coding project",
+  "main": "index.js",
+  "scripts": {
+    "compile": "rimraf dist/* && babel src/ -d dist/ --ignore __tests__/*",
+    "lint": "standard --fix",
+    "test": "jest --coverage",
+    "all": "yarn lint && yarn compile && yarn test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hoten/markup-project-Hoten.git"
+  },
+  "author": "Connor Clark <cjamcl@gmail.com> (http://cjamcl.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Hoten/markup-project-Hoten/issues"
+  },
+  "homepage": "https://github.com/Hoten/markup-project-Hoten#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-jest": "^20.0.1",
+    "babel-preset-env": "^1.4.0",
+    "jest": "^20.0.1",
+    "rimraf": "^2.6.1",
+    "standard": "^10.0.2"
+  },
+  "standard": {
+    "ignore": ["dist"]
+  }
+}
