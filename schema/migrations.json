@@ -1,4 +1,5 @@
 [
   "CREATE TABLE scores (html TEXT, score INTEGER)",
-  "ALTER TABLE scores ADD author VARCHAR(50)"
+  "ALTER TABLE scores ADD author VARCHAR(50)",
+  "ALTER TABLE scores ADD created_at DATE"
 ]

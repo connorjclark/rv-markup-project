@@ -17,12 +17,19 @@ const actions = {
 
       // ASSUMPTION: key contains no underscores
       const html = fs.readFileSync(path.join('data', item), 'utf8')
-      const key = item.split('_')[0]
+      const item_split = item.split('_')
+      const key = item_split[0]
+      const date = new Date(
+        parseInt(item_split[1]),
+        parseInt(item_split[2]) - 1,
+        parseInt(item_split[3])
+      )
 
       db.add(connHandler, {
         html,
         score: scorer(html),
-        author: key
+        author: key,
+        created_at: date
       }, cb)
     }, done)
   },
@@ -35,7 +42,8 @@ const actions = {
     db.add(connHandler, {
       html,
       score: scorer(html),
-      author
+      author,
+      created_at: Date.now()
     }, done)
   },
   get: (connHandler, done) => {

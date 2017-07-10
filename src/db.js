@@ -78,7 +78,7 @@ export function migrate (connHandler, done) {
   ], done)
 }
 
-export function add (connHandler, data, done) {
+export function add (connHandler, data, done) {  
   connHandler.query(`INSERT INTO scores SET ?`, data, (err, results, fields) => {
     if (err) return done(err)
 
