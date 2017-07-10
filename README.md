@@ -1,6 +1,25 @@
 MarkupProject
 =============
 
+About the implementation
+------------------------
+
+I went with node (JavaScript ES6, specifically), mainly because it's the environment I've used the most this last month.
+
+I started by setting up the node project structure. I enjoy some of the new features in ES6, so I used babel. To keep it simple, I just used the preset `babel-preset-env`.
+
+Again, to keep it simple, I used the `standard` linting package (as opposed to writing custom eslint rules, which is usually a waste of time).
+
+First thing I implemented was the scorer code, since it's really the meat of the application. I used Jest to test my code as I expanded on it. I broke it into two parts, 1) getting the frequency of each tag and 2) counting up those tags based on the tag values. Keeping it separate wasn't any extra work, and it's one small step away from supporting arbitrary tag values.
+
+I used `https://github.com/mysqljs/mysql` because I didn't want to bother a RDBMS interface. I spun my wheels a bit rolling my own migration system. Used `async` to avoid terrible callback hell.
+
+Lastly I looked around online a bit for something to help make a CLI, and found `https://github.com/tj/commander.js/`. After I figured out the library, implementing the remaining features came fairly quickly.
+
+I felt the feature creep after I did the ASCII tables, so I stopped there and began writing the documentation.
+
+If I came back to this, one thing I'd change would be the CLI library I used. As far as I saw, it doesn't support sub-commands with their own unique options, which I found frustrating.
+
 Installation
 ------------
 
