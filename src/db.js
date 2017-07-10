@@ -85,3 +85,11 @@ export function add (connHandler, data, done) {
     done(null)
   })
 }
+
+export function get (connHandler, data, done) {
+  connHandler.query(`SELECT author, score FROM scores WHERE author = ?`, [data.author], (err, results, fields) => {
+    if (err) return done(err)
+
+    done(null, results)
+  })
+}

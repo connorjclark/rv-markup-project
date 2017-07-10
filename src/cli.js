@@ -10,7 +10,7 @@ import async from 'async'
 const actions = {
   // process all .html files in data/
   init: (connHandler, done) => {
-    const items = fs.readdirSync('data/');
+    const items = fs.readdirSync('data/')
 
     async.eachSeries(items, (item, cb) => {
       if (!item.endsWith('.html')) return cb(null)
@@ -37,6 +37,22 @@ const actions = {
       score: scorer(html),
       author
     }, done)
+  },
+  get: (connHandler, done) => {
+    const author = program.author
+    const start = program.start
+    const end = program.end
+
+    db.get(connHandler, {
+      author,
+      start,
+      end
+    }, (err, results) => {
+      if (err) return done(err)
+
+      console.log(results)
+      done(null)
+    })
   }
 }
 
