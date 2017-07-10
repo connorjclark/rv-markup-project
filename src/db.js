@@ -90,12 +90,12 @@ export function get (connHandler, data, done) {
   // unfortunately, the mysqljs does not support named params,
   // so this repetition is required
   const params = [
-    data.author,
+    data.author, data.author,
     data.begin, data.begin,
     data.end, data.end
   ]
 
-  connHandler.query(`SELECT author, score, created_at FROM scores WHERE author = ? AND (created_at >= ? OR ? IS NULL) AND (created_at <= ? OR ? IS NULL)`, params, (err, results, fields) => {
+  connHandler.query(`SELECT author, score, created_at FROM scores WHERE (author = ? OR ? IS NULL) AND (created_at >= ? OR ? IS NULL) AND (created_at <= ? OR ? IS NULL)`, params, (err, results, fields) => {
     if (err) return done(err)
 
     done(null, results)
